@@ -12,4 +12,9 @@ public class ConstantPoolEntry {
     public String asUtf8() {
         return (tag == 1 && value instanceof String) ? (String) value : null;
     }
+
+    @Override
+    public String toString() {
+        return "CP[tag=" + tag + ", value=" + value + "]";
+    }
 }
