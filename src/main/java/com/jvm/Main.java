@@ -1,5 +1,8 @@
-package com.jvm.phase1;
+package com.jvm;
 
+import com.jvm.phase1.ClassFile;
+import com.jvm.phase1.ClassFileParser;
+import com.jvm.phase1.MethodInfo;
 import com.jvm.phase2.BytecodeInterpreter;
 
 public class Main {
