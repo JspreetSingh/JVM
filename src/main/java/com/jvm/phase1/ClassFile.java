@@ -103,4 +103,13 @@ public class ClassFile {
         }
         return null;
     }
+
+    // find a method by name and descriptor
+    public MethodInfo findMethod(String name, String descriptor) {
+        for (MethodInfo m : methods) {
+            if (name.equals(m.name) && descriptor.equals(m.descriptor)) return m;
+        }
+        return null;
+    }
+
 }
