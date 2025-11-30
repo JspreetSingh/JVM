@@ -112,4 +112,47 @@ public class ClassFile {
         return null;
     }
 
+    // Resolve a CONSTANT_Methodref entry → MethodInfo
+    public MethodInfo resolveMethod(int cpIndex) {
+        // cpIndex points to a Methodref entry (tag 10)
+        ConstantPoolEntry ref = constantPool[cpIndex];
+        if (ref == null || ref.tag != 10)
+            throw new RuntimeException("Not a Methodref at cp index: " + cpIndex);
+
+        int[] arr = (int[]) ref.value;  // {classIndex, nameAndTypeIndex}
+        int classIndex = arr[0];
+        int natIndex = arr[1];
+
+        // class name
+        String clazz = getClassNameFromCp(classIndex);
+
+        // method name + descriptor
+        String[] nat = getNameAndType(natIndex);
+        String methodName = nat[0];
+        String descriptor = nat[1];
+
+        // Only supporting methods inside the same class for now
+        if (!clazz.equals(this.getClassName())) {
+            throw new RuntimeException("Cross-class method invocation not implemented: " + clazz);
+        }
+
+        // find the method
+        MethodInfo m = findMethod(methodName, descriptor);
+        if (m == null) {
+            throw new RuntimeException("Method not found: " + methodName + descriptor);
+        }
+
+        return m;
+    }
+
+    public final List<FieldInfo> fields = new ArrayList<>();
+
+    public FieldInfo findField(String name) {
+        for (FieldInfo f : fields) {
+            if (f.name.equals(name)) return f;
+        }
+        return null;
+    }
+
+
 }

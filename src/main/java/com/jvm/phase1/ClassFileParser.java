@@ -121,6 +121,24 @@ public class ClassFileParser {
                 }
             }
 
+            int fieldsCounts = in.readUnsignedShort();
+            for (int i = 0; i < fieldsCounts; i++) {
+                FieldInfo fi = new FieldInfo();
+                fi.accessFlags = in.readUnsignedShort();
+                fi.name = cf.getUtf8(in.readUnsignedShort());
+                fi.descriptor = cf.getUtf8(in.readUnsignedShort());
+
+                int ac = in.readUnsignedShort();
+                // skip field attributes
+                for (int j = 0; j < ac; j++) {
+                    in.readUnsignedShort(); // attribute_name_index
+                    int len = in.readInt();
+                    in.skipBytes(len);
+                }
+                cf.fields.add(fi);
+            }
+
+
             return cf;
         }
     }
